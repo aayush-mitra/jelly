@@ -1,38 +1,350 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Quicksand:wght@500;700&display=swap');
+
+:root {
+  --bg-top: #fca5a5;
+  --bg-bottom: #be123c;
+  --cream: #fff7ed;
+  --card-front: #fef3c7;
+  --card-border: #c2410c;
+  --envelope: #fecaca;
+  --envelope-shadow: #fda4af;
+  --ink: #7f1d1d;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html,
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.App-header {
-  background-color: #282c34;
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.app {
   min-height: 100vh;
+  overflow-x: hidden;
+  padding: 2.5rem 1rem 4rem 2.5rem;
+  color: var(--cream);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.24), transparent 30%),
+    radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.18), transparent 28%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 0.3rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.hero h1 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.4rem, 7vw, 5.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-shadow: 0 8px 24px rgba(136, 19, 55, 0.25);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.hero p {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  font-family: 'Quicksand', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.card-list {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+  overflow: visible;
+}
+
+.candygram {
+  display: flex;
+  position: relative;
+  z-index: 0;
+}
+
+.tilt-left {
+  justify-content: flex-start;
+}
+
+.tilt-right {
+  justify-content: flex-end;
+}
+
+.card-button {
+  position: relative;
+  width: min(88vw, 440px);
+  height: clamp(170px, 26vw, 230px);
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 1200px;
+  font: inherit;
+  text-align: left;
+  transform-origin: center;
+  transition: transform 220ms ease;
+}
+
+.tilt-left .card-button {
+  transform: rotate(-2deg);
+}
+
+.tilt-right .card-button {
+  transform: rotate(2deg);
+}
+
+.card-button:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(165deg, var(--envelope), var(--envelope-shadow));
+  box-shadow: 0 16px 36px rgba(127, 29, 29, 0.3);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: -10px;
+  left: 7%;
+  width: 86%;
+  height: 60px;
+  background: linear-gradient(170deg, #ffe4e6, #fda4af);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  filter: drop-shadow(0 4px 6px rgba(127, 29, 29, 0.3));
+}
+
+.card-inner {
+  position: absolute;
+  inset: 14px;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  background: var(--cream);
+  color: var(--ink);
+  transform: translateY(20px);
+  transition: transform 320ms ease;
+  z-index: 1;
+}
+
+.card-inner h2 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+}
+
+.card-inner p {
+  margin: 0.6rem 0 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(0.88rem, 1.75vw, 0.98rem);
+  max-width: 30ch;
+}
+
+.card-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 3px solid var(--card-border);
+  --open-rotation: -180deg;
+  --open-transform: rotateY(var(--open-rotation));
+  transform-origin: left center;
+  transition: transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+.hinge-right .card-cover {
+  transform-origin: right center;
+  --open-rotation: 180deg;
+}
+
+.hinge-left .card-cover {
+  transform-origin: left center;
+  --open-rotation: -180deg;
+}
+
+.cover-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #fecdd3, var(--card-front));
+  backface-visibility: hidden;
+}
+
+.cover-front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.cover-front-text {
+  position: relative;
+  z-index: 2;
+  color: #9f1239;
+}
+
+.cover-front-text h2,
+.cover-front-text h4 {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  text-transform: none;
+}
+
+.cover-front-text h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+}
+
+.cover-front-text h4 {
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+}
+
+.cover-overlay-icons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.candy-icon {
+  position: absolute;
+  color: rgba(159, 18, 57, 0.35);
+}
+
+.candy-icon-main {
+  right: 0.9rem;
+  top: 0.7rem;
+  font-size: 2.3rem;
+  transform: rotate(14deg);
+}
+
+.candy-icon-top {
+  left: 0.8rem;
+  top: 0.6rem;
+  font-size: 1.8rem;
+  transform: rotate(-12deg);
+}
+
+.candy-icon-bottom {
+  left: 1.15rem;
+  bottom: 0.65rem;
+  font-size: 1.9rem;
+  transform: rotate(8deg);
+}
+
+.cover-back {
+  background: #ffe4e6;
+  transform: rotateY(180deg);
+}
+
+.camera-back {
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+  padding: 0.4rem;
+}
+
+.card-photo {
+  position: absolute;
+  left: 0.4rem;
+  right: 0.4rem;
+  bottom: 0.4rem;
+  z-index: 3;
+  width: calc(100% - 0.8rem);
+  height: auto;
+  display: block;
+  background: #fff;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.candygram.open .card-cover {
+  transform: var(--open-transform);
+}
+
+.candygram.open .card-inner {
+  transform: translateY(0);
+}
+
+.candygram.open {
+  z-index: 20;
+}
+
+@media (max-width: 940px) {
+  html,
+  body,
+  .app {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  to {
-    transform: rotate(360deg);
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  .app::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .card-list {
+    gap: 1.4rem;
+  }
+
+  .card-button {
+    width: min(92vw, 440px);
+    height: 178px;
+  }
+
+  .envelope-flap {
+    left: 6%;
+    width: 88%;
+  }
+
+  .card-cover {
+    --open-transform: rotateX(180deg);
+  }
+
+  .hinge-right .card-cover,
+  .hinge-left .card-cover {
+    transform-origin: top center;
+  }
+
+  .cover-back {
+    transform: rotateX(180deg);
+  }
+
+  .camera-back {
+    padding: 0.3rem;
+  }
+
+  .card-photo {
+    left: 0.3rem;
+    right: 0.3rem;
+    bottom: 0.3rem;
+    width: calc(100% - 0.6rem);
   }
 }
