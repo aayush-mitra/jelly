@@ -337,6 +337,19 @@ body::-webkit-scrollbar {
     transform: rotateX(180deg);
   }
 
+  .cover-front,
+  .cover-front-text,
+  .cover-overlay-icons {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .candygram.open .cover-front {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   .camera-back {
     padding: 0.3rem;
   }
